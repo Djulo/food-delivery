@@ -17,9 +17,10 @@
 			var name = document.podaci.name.value;
 			var email = document.podaci.email.value;
 			var phone = document.podaci.phone.value;
+			var adresa = document.podaci.adresa.value;
 
 			if (name == "") {
-				alert("Niste uneli ime i prezime!");
+				alert("Niste uneli Ime i Prezime!");
 				return;
 			}
 
@@ -28,7 +29,7 @@
 				return;
 			}
 			else {
-				var reg = /^\w+(.\w+)?@\w+\.\w+$/;
+				var reg = /^\w+(-\w+)?@\w+\.\w+$/;
 
 				if (!reg.test(email)) {
 					alert("E-mail nije u odgovarajucem formatu!");
@@ -36,32 +37,54 @@
 				}
 			}
 
-			if (name == "") {
-				alert("Niste uneli ime i prezime!");
-				return;
-			}
-
 			if (phone == "") {
-				alert("Niste uneli telefon");
+				alert("Niste uneli broj telefona!");
 				return;
 			}
 			else {
-				var reg1 = /^([0-9]{3}-[0-9]{3}-[0-9]{3,4})$/;
-				if (!reg1.test(phone)) {
+				var reg = /\+381\d{8}/;
+				if (!reg.test(phone)) {
 					alert("Telefon nije u odgovarajucem formatu!");
 					return;
 				}
 			}
 
+			if (adresa == "") {
+				alert("Niste uneli adresu!");
+				return;
+			}
+
+
 			var user = {
 				name: name,
 				email: email,
+				address: adresa,
 				phone: phone
 			}
 
 			console.log(user);
-			localStorage.setItem('user', JSON.stringify(user));
+			if(localStorage.user){
+				var old_user = JSON.parse(localStorage.user);
+				if(user.email != old_user.email){
+					localStorage.setItem('user', JSON.stringify(user));
+					localStorage.removeItem('orders');
+				}
+			}
 
+			var order = JSON.parse(localStorage.order);
+
+			if (localStorage.orders) {
+				var arr = JSON.parse(localStorage.orders);
+				arr.push(order);
+				localStorage.setItem("orders", JSON.stringify(arr));
+			}
+			else {
+				var arr = new Array(order);
+				localStorage.setItem("orders", JSON.stringify(arr));
+			}
+			alert('placeno');
+			localStorage.removeItem('cart');
+			window.location = 'mojeNarudzbine.html';
 		}
 
 	</script>
@@ -105,7 +128,7 @@
 						<a class="nav-link" href="dostava.html">Dostava</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Moje Porudzbine</a>
+						<a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="nasTim.html">O nama</a>
@@ -146,7 +169,7 @@
 								<label for="phone">Telefon:</label>
 								<input type="tel" class="form-control" id="phone" name="phone" required>
 							</div>
-							<input type="submit" onclick="send()" class="btn btn-block btn-success" value="Plati">
+							<input type="button" onclick="send()" class="btn btn-block btn-success" value="Naruci">
 						</form>
 					</div>
 				</div>
@@ -157,7 +180,6 @@
 		</div>
 	</div>
 	<footer class="mt-3 pb-3 footer-expand-lg bg-light" style="color:black; text-decoration: none; text-align:center;">
-
 		Copyright 2019<br>
 		Nikola Kovacevic • Stefan Pusica<br>
 		Odsek za softversko inzenjerstvo Elektrotehnickog fakulteta Univerziteta u Beogradu

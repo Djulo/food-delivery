@@ -35,22 +35,41 @@
     <script src="../js/main.js"></script>
 
     <script>
-		
         var data = JSON.parse(localStorage.getItem('globalData')).restorani;
         data.sort((a, b) => a.naziv.localeCompare(b.naziv));
         $('document').ready(function () {
             $('input:checkbox').change(function () {
                 data = JSON.parse(localStorage.getItem('globalData')).restorani;
-                var opstine = $('input:checkbox');
-                for (var i = 0; i < opstine.length; i++) {
-                    if (opstine[i].checked) data = data.filter(restoran => restoran.opstine.includes(opstine[i].value));
+                var kuhinje = $('input:checkbox');
+                for (var i = 0; i < kuhinje.length; i++) {
+                    if (kuhinje[i].checked) data = data.filter(restoran => restoran.kuhinje.includes(kuhinje[i].value + " hrana"));
                 }
                 load();
             })
+
+            $('select').change(function () {
+                switch (this.value) {
+                    case 'Nazivu':
+                        data.sort(function (a, b) {
+                            return a.naziv.localeCompare(b.naziv);
+                        })
+                        break;
+                    case 'Lokaciji':
+                        data.sort(function (a, b) {
+                            return a.adresa.localeCompare(b.adresa);
+                        })
+                        break;
+                    case 'Oceni':
+                        data.sort(function (a, b) {
+                            return dohvatiOcenu(b) - dohvatiOcenu(a);
+                        })
+                        break;
+                }
+                load();
+            });
         })
 
         function load() {
-			
             // $('#restorani').remove();
             $('#restorani').empty();
             $('#restorani').append('<div class="container-fluid"></div>');
@@ -63,7 +82,7 @@
                         $('#row' + rowCnt).append('\
                         <div class="col col-sm-6">\
                             <div class="card">\
-                                <a href="restoran.html" style="color:black; text-decoration: none;" onclick="restoran(' + data[colCnt].id + ')">\
+                                <a href="meni.html" style="color:black; text-decoration: none;" onclick="restoran(' + data[colCnt].id + ')">\
                                     <img class="card-img-top" src="../img/' + data[colCnt].slika[0] + '" alt="">\
                                     <div class="card-body">\
                                         <h4 class="card-title font-weight-bold">' + data[colCnt].naziv + '</h5>\
@@ -122,7 +141,7 @@
                         <a class="nav-link" href="nasTim.html">O nama</a>
                     </li>
                 </ul>
-                <a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
+                <a class="mr-3" href="../en/delivery.html"><img src='../img/uk.jpg' width='30px' height='20px'></a>
                 <a href="korpa.html"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
@@ -135,19 +154,43 @@
             </div>
             <div class="col col-sm-2">
                 <form class="sticky-top">
-                    
+                    <div class="form-group">
+                        <label for="">Sortiraj po:</label>
+                        <select class="form-control form-control-sm">
+                            <option>Nazivu</option>
+                            <option>Lokaciji</option>
+                            <option>Oceni</option>
+                        </select>
+                    </div>
                     <br>
                     <div class="form-group">
-                        <label for="">Opstine:</label>
+                        <label for="">Kuhinje:</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Vozdovac" id="azijska">Vozdovac<br>
-                            <input class="form-check-input" type="checkbox" value="Novi Beograd"
-                                id="italijanska">Novi Beograd<br>
-                            <input class="form-check-input" type="checkbox" value="Zvezdara" id="kineska">Zvezdara<br>
-                            <input class="form-check-input" type="checkbox" value="Vracar" id="meksicka">Vracar<br>
-                            
+                            <input class="form-check-input" type="checkbox" value="Azijska" id="azijska">Azijska
+                            hrana<br>
+                            <input class="form-check-input" type="checkbox" value="Italijanska"
+                                id="italijanska">Italijanska
+                            hrana<br>
+                            <input class="form-check-input" type="checkbox" value="Kineska" id="kineska">Kineska
+                            hrana<br>
+                            <input class="form-check-input" type="checkbox" value="Meksicka" id="meksicka">Meksicka
+                            hrana<br>
+                            <input class="form-check-input" type="checkbox" value="Srpska" id="srpksa">Srpska hrana<br>
+                            <input class="form-check-input" type="checkbox" value="Vegeterijanska"
+                                id="vegeterijanska">Vegeterijanska
+                            hrana<br>
                         </div>
                     </div>
+                    <!-- <div class="form-group">
+                            <label for="">Opstina:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Vozdovac" id="vozdovac">Vozdovac<br>
+                                <input class="form-check-input" type="checkbox" value="Novi Beograd"
+                                    id="noviBeograd">Novi Beograd<br>
+                                <input class="form-check-input" type="checkbox" value="Zvezdara" id="zvezdara">Zvezdara<br>
+                                <input class="form-check-input" type="checkbox" value="Vracar" id="vracar">Vracar<br>
+                            </div>
+                        </div> -->
                 </form>
             </div>
         </div>

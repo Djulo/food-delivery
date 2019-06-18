@@ -31,6 +31,71 @@
             background-color: darkgray;
         }
     </style>
+
+
+    <script>
+        var data = JSON.parse(localStorage.cart);
+        function load() {
+            $('#korpa').empty();
+            $('#korpa').append('\
+                    <thead>\
+                        <tr>\
+                            <th scope="col"> </th>\
+                            <th scope="col">Proizvod</th>\
+                            <th scope="col" class="text-center">Kolicina</th>\
+                            <th scope="col" class="text-right">Cena</th>\
+                            <th> </th>\
+                        </tr>\
+                    </thead>\
+                ');
+            var sum = 0;
+            data.forEach(function (item) {
+                sum += item.cena * item.kolicina;
+                $('#korpa').append('\
+                    <tr>\
+                        <td><img src="../img/' + item.slika + '" width="50px" height="50px"/></td>\
+                        <td>' + item.naziv + '</td>\
+                        <td class="text-center">' + item.kolicina + '</td>\
+                        <td class="text-right">' + item.cena * item.kolicina + ' RSD</td>\
+                        <td class="text-right"><button class="btn btn-sm btn-danger" onclick="ukloni(\'' + item.naziv + '\')"><i class="fa fa-trash"></i>\
+                                        </button> </td>\
+                    </tr>\
+                    ');
+            });
+            $('#korpa').append('\
+                        <tr>\
+                            <td></td>\
+                            <td></td>\
+                            <td></td>\
+                            <td><strong>Ukupno</strong></td>\
+                            <td class="text-right"><strong>' + sum + ' RSD</strong></td>\
+                        </tr>\
+                ');
+        }
+
+        function naruci() {
+
+            var sum = 0;
+            data.forEach(e => sum += e.cena * e.kolicina);
+            var order = {
+                restoran: JSON.parse(localStorage.restoran).naziv,
+                datum: new Date().toUTCString(),
+                cena: sum,
+            }
+
+            localStorage.setItem('order', JSON.stringify(order));
+        }
+
+        function ukloni(proizvod){
+            data = data.filter(function(item){
+                return item.naziv != proizvod;
+            })
+            localStorage.setItem('cart',JSON.stringify(data));
+            load();
+        }
+
+    </script>
+
 </head>
 
 <body onload="load()">
@@ -55,7 +120,7 @@
                         <a class="nav-link" href="dostava.html">Dostava</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Moje Porudzbine</a>
+                        <a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="nasTim.html">O nama</a>
@@ -87,7 +152,8 @@
                         <a href="restoran.html" class="btn btn-block btn-light">Nastavi sa kupovinom</a>
                     </div>
                     <div class="col-sm-12 col-md-6 text-right">
-                        <a href="placanje.html" class="btn btn-lg btn-block btn-success text-uppercase">Placanje</a>
+                        <a href="placanje.html" onclick="naruci()"
+                            class="btn btn-lg btn-block btn-success text-uppercase">Placanje</a>
                     </div>
                 </div>
             </div>
@@ -99,52 +165,6 @@
         Nikola Kovacevic • Stefan Pusica<br>
         Odsek za softversko inzenjerstvo Elektrotehnickog fakulteta Univerziteta u Beogradu
     </footer>
-
-    <script>
-        var data = JSON.parse(localStorage.cart);
-        console.log(data);
-
-        function load() {
-            $('#korpa').empty();
-            $('#korpa').append('\
-                    <thead>\
-                        <tr>\
-                            <th scope="col"> </th>\
-                            <th scope="col">Proizvod</th>\
-                            <th scope="col" class="text-center">Kolicina</th>\
-                            <th scope="col" class="text-right">Cena</th>\
-                            <th> </th>\
-                        </tr>\
-                    </thead>\
-                ');
-            var sum = 0;
-            console.log($('#korpa'));
-            data.forEach(function (item) {
-                console.log(item);
-                sum += item.cena * item.kolicina;
-                $('#korpa').append('\
-                    <tr>\
-                        <td><img src="../img/' + item.slika + '" width="50px" height="50px"/></td>\
-                        <td>' + item.naziv + '</td>\
-                        <td><input class="form-control" type="text" value="' + item.kolicina + '" /></td>\
-                        <td class="text-right">' + item.cena * item.kolicina + ' RSD</td>\
-                        <td class="text-right"><button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>\
-                                        </button> </td>\
-                    </tr>\
-                    ');
-            });
-            console.log($('#korpa'));
-            $('#korpa').append('\
-                        <tr>\
-                            <td></td>\
-                            <td></td>\
-                            <td></td>\
-                            <td><strong>Ukupno</strong></td>\
-                            <td class="text-right"><strong>' + sum + ' RSD</strong></td>\
-                        </tr>\
-                ');
-        }
-    </script>
 </body>
 
 </html>

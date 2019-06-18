@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://kit.fontawesome.com/22d3392419.js"></script>
-    <title>Food Delivery</title>
+    <title>Food Delivery - Delivery</title>
 
     <style>
         .card-body p {
@@ -35,22 +35,41 @@
     <script src="../js/main.js"></script>
 
     <script>
-		
-        var data = JSON.parse(localStorage.getItem('globalData')).restorani;
+        var data = JSON.parse(localStorage.getItem('globalData-en')).restorani;
         data.sort((a, b) => a.naziv.localeCompare(b.naziv));
         $('document').ready(function () {
             $('input:checkbox').change(function () {
-                data = JSON.parse(localStorage.getItem('globalData')).restorani;
-                var opstine = $('input:checkbox');
-                for (var i = 0; i < opstine.length; i++) {
-                    if (opstine[i].checked) data = data.filter(restoran => restoran.opstine.includes(opstine[i].value));
+                data = JSON.parse(localStorage.getItem('globalData-en')).restorani;
+                var kuhinje = $('input:checkbox');
+                for (var i = 0; i < kuhinje.length; i++) {
+                    if (kuhinje[i].checked) data = data.filter(restoran => restoran.kuhinje.includes(kuhinje[i].value + " hrana"));
                 }
                 load();
             })
+
+            $('select').change(function () {
+                switch (this.value) {
+                    case 'Name':
+                        data.sort(function (a, b) {
+                            return a.naziv.localeCompare(b.naziv);
+                        })
+                        break;
+                    case 'Location':
+                        data.sort(function (a, b) {
+                            return a.adresa.localeCompare(b.adresa);
+                        })
+                        break;
+                    case 'Grade':
+                        data.sort(function (a, b) {
+                            return dohvatiOcenu(b) - dohvatiOcenu(a);
+                        })
+                        break;
+                }
+                load();
+            });
         })
 
         function load() {
-			
             // $('#restorani').remove();
             $('#restorani').empty();
             $('#restorani').append('<div class="container-fluid"></div>');
@@ -63,15 +82,15 @@
                         $('#row' + rowCnt).append('\
                         <div class="col col-sm-6">\
                             <div class="card">\
-                                <a href="restoran.html" style="color:black; text-decoration: none;" onclick="restoran(' + data[colCnt].id + ')">\
+                                <a href="menu.html" style="color:black; text-decoration: none;" onclick="restoran(' + data[colCnt].id + ')">\
                                     <img class="card-img-top" src="../img/' + data[colCnt].slika[0] + '" alt="">\
                                     <div class="card-body">\
                                         <h4 class="card-title font-weight-bold">' + data[colCnt].naziv + '</h5>\
                                         <h6 class="card-text">' + data[colCnt].adresa + '</h6>\
                                         <i class="far fa-star"></i>\
                                         ' + dohvatiOcenu(data[colCnt]) + '\
-                                        <p class="card-text">Otvoreno - '+ data[colCnt].kuhinje[0] + ' - 838 m <br>\
-                                            Dostava od: '+ data[colCnt].min_dostava + ' RSD - ' + data[colCnt].cena_dostave + '\
+                                        <p class="card-text">Open - '+ data[colCnt].kuhinje[0] + ' - 838 m <br>\
+                                            Delivery from: '+ data[colCnt].min_dostava + ' RSD - ' + data[colCnt].cena_dostave + '\
                                         </p>\
                                     </div>\
                                 </a>\
@@ -110,20 +129,20 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="restorani.html">Restorani</a>
+                        <a class="nav-link" href="restaurants.html">Restaurants</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dostava.html">Dostava</a>
+                        <a class="nav-link" href="delivery.html">Delivery</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
+                        <a class="nav-link" href="myOrders.html">My orders</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="nasTim.html">O nama</a>
+                        <a class="nav-link" href="ourTeam.html">O nama</a>
                     </li>
                 </ul>
-                <a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
-                <a href="korpa.html"><i class="fas fa-shopping-cart"></i></a>
+                <a class="mr-3" href="../rs/dostava.html"><img src='../img/srbija.png' width='30px' height='20px'></a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
     </nav>
@@ -135,19 +154,38 @@
             </div>
             <div class="col col-sm-2">
                 <form class="sticky-top">
-                    
+                    <div class="form-group">
+                        <label for="">Sort by:</label>
+                        <select class="form-control form-control-sm">
+                            <option>Name</option>
+                            <option>Location</option>
+                            <option>Grade</option>
+                        </select>
+                    </div>
                     <br>
                     <div class="form-group">
-                        <label for="">Opstine:</label>
+                        <label for="">Filter:</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Vozdovac" id="azijska">Vozdovac<br>
-                            <input class="form-check-input" type="checkbox" value="Novi Beograd"
-                                id="italijanska">Novi Beograd<br>
-                            <input class="form-check-input" type="checkbox" value="Zvezdara" id="kineska">Zvezdara<br>
-                            <input class="form-check-input" type="checkbox" value="Vracar" id="meksicka">Vracar<br>
-                            
+                            <input class="form-check-input" type="checkbox" value="Azijska" id="azijska">Asian food<br>
+                            <input class="form-check-input" type="checkbox" value="Italijanska"
+                                id="italijanska">Itialian food<br>
+                            <input class="form-check-input" type="checkbox" value="Kineska" id="kineska">Chinese food<br>
+                            <input class="form-check-input" type="checkbox" value="Meksicka" id="meksicka">Mexican food<br>
+                            <input class="form-check-input" type="checkbox" value="Srpska" id="srpksa">Serbian food<br>
+                            <input class="form-check-input" type="checkbox" value="Vegeterijanska"
+                                id="vegeterijanska">Vegeterian food<br>
                         </div>
                     </div>
+                    <!-- <div class="form-group">
+                            <label for="">Opstina:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Vozdovac" id="vozdovac">Vozdovac<br>
+                                <input class="form-check-input" type="checkbox" value="Novi Beograd"
+                                    id="noviBeograd">Novi Beograd<br>
+                                <input class="form-check-input" type="checkbox" value="Zvezdara" id="zvezdara">Zvezdara<br>
+                                <input class="form-check-input" type="checkbox" value="Vracar" id="vracar">Vracar<br>
+                            </div>
+                        </div> -->
                 </form>
             </div>
         </div>

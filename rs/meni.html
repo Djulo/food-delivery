@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="../img/pizza_logo.png">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="https://kit.fontawesome.com/22d3392419.js"></script>
+    <title>Food Delivery</title>
+
+    <style>
+        .card-body p {
+            font-size: 0.85rem;
+        }
+
+        body {
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: darkgray;
+        }
+    </style>
+
+    <script src="../js/main.js"></script>
+
+    <script>
+        var data = JSON.parse(localStorage.restoran);
+        console.log(data);
+
+        function load() {
+            $('#restoran').empty();
+            $('#restoran').append('<div class="container-fluid"></div>');
+            data.jela.forEach(function (item) {
+                $('#restoran > div.container-fluid').append('\
+                <div class="row">\
+                <div class="row border bg-white">\
+                    <div class="col col-sm-8 mt-3">\
+                        <h4><strong>' + item.naziv + '</strong></h4>\
+                        <p>SASTOJCI: ' + item.sastojci + '</p>\
+                        <P><strong>' + item.cena + '</strong></P>\
+                        <button class="mb-2 btn btn-dark" onclick="dodaj(\'' + item.naziv + '\',' + item.cena + '\,\'' + item.slika + '\')">Dodaj u korpu</button>\
+                    </div>\
+                    <div class="col col-sm-4">\
+                        <img class="float-right m-2" src="../img/' + item.slika + '" alt=""\
+                            style="width: 200px;">\
+                    </div>\
+                </div>\
+                ')
+            });
+            $('#restorani > div.container-fluid').append('</div>');
+        }
+
+        function dodaj(naziv, cena, slika) {
+            if (localStorage.cart) {
+                var arr = JSON.parse(localStorage.cart);
+                if (arr.some(e => e.naziv === naziv)) {
+                    arr.find(e => e.naziv === naziv).kolicina++;
+                }
+                else {
+                    arr.push({ "naziv": naziv, "cena": cena, "slika": slika, "kolicina": 1 });
+                }
+                localStorage.setItem("cart", JSON.stringify(arr));
+            }
+            else {
+                var arr = new Array({ "naziv": naziv, "cena": cena, "slika": slika, "kolicina": 1 });
+                localStorage.setItem("cart", JSON.stringify(arr));
+            }
+        }
+
+    </script>
+
+</head>
+
+<body onload="load()">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="../img/pizza_logo.png" alt="">
+                Food Delivery
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="restorani.html">Restorani</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dostava.html">Dostava</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="nasTim.html">O nama</a>
+                    </li>
+                </ul>
+                <a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
+                <a href="korpa.html"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">MENI</h1>
+        </div>
+    </section>
+
+    <div id="restoran" class="container">
+        <!-- <div id="nav-right" class="col col-sm-3 pr-0">
+                    <ul class="nav flex-column border bg-white sticky-top">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#pizza">Pizza</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#burgeri">Burgeri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#paste">Paste</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Salate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pica</a>
+                        </li>
+                    </ul>
+                </div> -->
+    </div>
+
+    <footer class="mt-3 pb-3 page-footer footer-expand-lg bg-white"
+        style="color:black; text-decoration: none; text-align:center;">
+        Copyright 2019<br>
+        Nikola Kovacevic • Stefan Pusica<br>
+        Odsek za softversko inzenjerstvo Elektrotehnickog fakulteta Univerziteta u Beogradu
+    </footer>
+
+
+</body>
+
+</html>

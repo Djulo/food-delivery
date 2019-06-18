@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://kit.fontawesome.com/22d3392419.js"></script>
-    <title>Food Delivery</title>
+    <title>Food Delivery - Restaurant</title>
 
     <style>
         .card-body p {
@@ -60,23 +60,23 @@
 					</div>\
                     <div class="card mt-3 pr-0 pl-0 mr-0 ml-0">\
                         <h3 class="card-title font-weight-bold">' + data.naziv + '</h3>\
-                        <h6 class="card-text">Otvoreno - '+ data.kuhinje[0] + '</h6>\
+                        <h6 class="card-text">Open - '+ data.kuhinje[0] + '</h6>\
                     </div>\
                 </div>\
             </div>\
             <div class="col">\
                 <div class="row mt-3">\
                     <div class="col border bg-white">\
-                        <h4><strong>Uslov dostave</strong></h4>\
-                        <p>Ispod cete videti uslove dostave koja vazi za adresu: ' + data.adresa + '</p>\
-                        <p>Dostava od:' + data.min_dostava + '</p>\
-                        <p>Cena dostave:' + data.cena_dostave + '</p>\
+                        <h4><strong>Delivery requirements</strong></h4>\
+                        <p>Bellow you can find delivery requirements for address: ' + data.adresa + '</p>\
+                        <p>Delivery from:' + data.min_dostava + '</p>\
+                        <p>Delivery price:' + data.cena_dostave + '</p>\
                         <div class="offset-9 col-3">\
 								<div class="ml-auto">\
 									<form name="oceni">\
 										<div class="form-group d-flex align-items-center">\
 											<input type="number" id="ocenaRest" class="form-control" min="1" max="5" value="5" name="ocena">\
-											<input type="button" onclick="oceniRestoran()" class="btn btn-danger btn-lg ml-3" value="Oceni">\
+											<input type="button" onclick="oceniRestoran()" class="btn btn-danger btn-lg ml-3" value="Rate">\
 										</div>\
 									</form>\
 							</div>\
@@ -85,7 +85,7 @@
                 </div>\
                 <div class="row mt-3 mb-4">\
                     <div class="col border bg-white">\
-                        <h4><strong>Informacije</strong></h4>\
+                        <h4><strong>Information</strong></h4>\
                         <p>' + data.adresa + '</p>\
                         <p>OPIS: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse, ullam.\
                             Placeat quos quasi aperiam porro maiores! Dolorum, nesciunt exercitationem sunt\
@@ -139,7 +139,7 @@
 
         function oceniRestoran() {
             var a = parseInt(document.getElementById("ocenaRest").value);
-            var globalData = JSON.parse(localStorage.globalData);
+            var globalData = JSON.parse(localStorage.getItem('globalData-en'));
 
             for (var i = 0; i < globalData.restorani.length; i++) {
                 if (globalData.restorani[i].id == data.id) {
@@ -147,7 +147,7 @@
                     break;
                 }
             }
-            localStorage.setItem("globalData", JSON.stringify(globalData));
+            localStorage.setItem("globalData-en", JSON.stringify(globalData));
         }
 
     </script>
@@ -171,20 +171,20 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="restorani.html">Restorani</a>
+                        <a class="nav-link" href="restaurants.html">Restaurants</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dostava.html">Dostava</a>
+                        <a class="nav-link" href="delivery.html">Delivery</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
+                        <a class="nav-link" href="myOrders.html">My Orders</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="nasTim.html">O nama</a>
+                        <a class="nav-link" href="ourTeam.html">About us</a>
                     </li>
                 </ul>
-                <a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
-                <a href="korpa.html"><i class="fas fa-shopping-cart"></i></a>
+                <a class="mr-3" href="../rs/restoran.html"><img src='../img/srbija.png' width='30px' height='20px'></a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
     </nav>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="../img/pizza_logo.png">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="https://kit.fontawesome.com/22d3392419.js"></script>
+    <title>Food Delivery</title>
+    <script>
+
+        function send() {
+            var name = document.podaci.name.value;
+            var email = document.podaci.email.value;
+            var phone = document.podaci.phone.value;
+            var adresa = document.podaci.adresa.value;
+
+            if (name == "") {
+                alert("Niste uneli Ime i Prezime!");
+                return;
+            }
+
+            if (email == "") {
+                alert("Niste uneli E-mail!");
+                return;
+            }
+            else {
+                var reg = /^\w+(-\w+)?@\w+\.\w+$/;
+
+                if (!reg.test(email)) {
+                    alert("E-mail nije u odgovarajucem formatu!");
+                    return;
+                }
+            }
+
+            if (phone == "") {
+                alert("Niste uneli broj telefona!");
+                return;
+            }
+            else {
+                var reg = /\+381\d{8}/;
+                if (!reg.test(phone)) {
+                    alert("Telefon nije u odgovarajucem formatu!");
+                    return;
+                }
+            }
+
+            if (adresa == "") {
+                alert("Niste uneli adresu!");
+                return;
+            }
+
+
+            var user = {
+                name: name,
+                email: email,
+                address: adresa,
+                phone: phone
+            }
+
+            console.log(user);
+            if (localStorage.user) {
+                var old_user = JSON.parse(localStorage.user);
+                if (user.email != old_user.email) {
+                    localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.removeItem('orders');
+                }
+            }
+
+            var order = JSON.parse(localStorage.order);
+
+            if (localStorage.orders) {
+                var arr = JSON.parse(localStorage.orders);
+                arr.push(order);
+                localStorage.setItem("orders", JSON.stringify(arr));
+            }
+            else {
+                var arr = new Array(order);
+                localStorage.setItem("orders", JSON.stringify(arr));
+            }
+            alert('placeno');
+            localStorage.removeItem('cart');
+            window.location = 'myOrders.html';
+        }
+
+    </script>
+    <style>
+        .card-body p {
+            font-size: 0.85rem;
+        }
+
+        body {
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="../img/pizza_logo.png" alt="">
+                Food Delivery
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="restaurants.html">Restaurants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="delivery.html">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="myOrders.html">My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ourTeam.html">About us</a>
+                    </li>
+                </ul>
+                <a class="mr-3" href="../rs/placanje.html"><img src='../img/srbija.png' width='30px'
+                        height='20px'></a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mt-3">
+        <div class="row">
+
+            <div class="offset-1 col col-sm-10 text-center">
+                <ul class="breadcrumb justify-content-center p-0">
+                    <li class="breadcrumb-item"><a href="Index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#"></a></li>
+                </ul>
+                <h1>Enter payment information</h1>
+                <div class="row mt-3">
+                    <div class="col-s-12 col-lg-6 ml-auto mr-auto">
+                        <form name="podaci">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail:</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adresa">Address:</label>
+                                <input type="text" class="form-control" id="adresa" name="adresa" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone:</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+                            <input type="button" onclick="send()" class="btn btn-block btn-success" value="Naruci">
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <hr>
+            </div>
+
+        </div>
+    </div>
+    <footer class="mt-3 pb-3 footer-expand-lg bg-light" style="color:black; text-decoration: none; text-align:center;">
+        Copyright 2019<br>
+        Nikola Kovacevic • Stefan Pusica<br>
+        Odsek za softversko inzenjerstvo Elektrotehnickog fakulteta Univerziteta u Beogradu
+    </footer>
+
+
+
+</body>
+
+</html>
