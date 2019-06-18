@@ -11,7 +11,7 @@
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://kit.fontawesome.com/22d3392419.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
-    <title>Food Delivery</title>
+    <title>Food Delivery - Moje Narudzbine</title>
 
     <style>
         .card-body p {
@@ -58,11 +58,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="orders.html">Moje Narudzbine</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="nasTim.html">O nama</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="nasTim.html" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            O nama
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="nagradeSponzori.html">Nagrade i sponzori</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="kontakt.html">Kontakt</a>
+                        </div>
                     </li>
                 </ul>
-                <a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
+                <a class="mr-3" href="../en/myOrders.html"><img src='../img/uk.jpg' width='30px' height='20px'></a>
                 <a href="korpa.html"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
@@ -131,9 +139,9 @@
             });
         }
 
-        function preuzmi(restoran, datum, cena){
+        function preuzmi(restoran, datum, cena) {
             var doc = new jsPDF();
-            doc.text(restoran + "\n" + datum + "\n" + cena, 10,10);
+            doc.text(restoran + "\n" + datum + "\n" + cena, 10, 10);
             doc.save("narudzbina.pdf");
         }
 

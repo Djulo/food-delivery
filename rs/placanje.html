@@ -63,9 +63,9 @@
 			}
 
 			console.log(user);
-			if(localStorage.user){
+			if (localStorage.user) {
 				var old_user = JSON.parse(localStorage.user);
-				if(user.email != old_user.email){
+				if (user.email != old_user.email) {
 					localStorage.setItem('user', JSON.stringify(user));
 					localStorage.removeItem('orders');
 				}
@@ -130,8 +130,16 @@
 					<li class="nav-item">
 						<a class="nav-link" href="mojeNarudzbine.html">Moje Narudzbine</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="nasTim.html">O nama</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="nasTim.html" id="navbarDropdown" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							O nama
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="nagradeSponzori.html">Nagrade i sponzori</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="kontakt.html">Kontakt</a>
+						</div>
 					</li>
 				</ul>
 				<a class="mr-3" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
