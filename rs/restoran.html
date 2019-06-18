@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../img/pizza_logo.png">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://kit.fontawesome.com/22d3392419.js"></script>
     <title>Food Delivery</title>
 
@@ -31,9 +31,90 @@
             background-color: darkgray;
         }
     </style>
+
+    <script src="../js/main.js"></script>
+
+    <script>
+        var data = JSON.parse(localStorage.restoran);
+        console.log(data);
+
+        function load() {
+            $('#restoran').empty();
+            $('#restoran').append('<div class="container-fluid"></div>');
+            $('#restoran > div.container-fluid').append('\
+            <div class="row">\
+                <div class="col">\
+                    <div class="card">\
+                        <img class="card-img-top" src="../img/' + data.slika + '" style="height:auto; max-height: 300px" alt="">\
+                        <div class="card-body">\
+                            <h3 class="card-title font-weight-bold">' + data.naziv + '</h3>\
+                            <h6 class="card-text">Otvoreno - '+ data.kuhinje[0] + '</h6>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+            </div class="col">\
+                <div class="row mt-3">\
+                    <div class="col border bg-white">\
+                        <h4><strong>Uslov dostave</strong></h4>\
+                        <p>Ispod cete videti uslove dostave koja vazi za adresu: ADRESA</p>\
+                        <p>Dostava od:' + data.min_dostava + '</p>\
+                        <p>Cena dostave:' + data.cena_dostave + '</p>\
+                    </div>\
+                </div>\
+                <div class="row mt-3 mb-4">\
+                    <div class="col border bg-white">\
+                        <h4><strong>Informacije</strong></h4>\
+                        <p>' + data.adresa + '</p>\
+                        <p>OPIS: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse, ullam.\
+                            Placeat quos quasi aperiam porro maiores! Dolorum, nesciunt exercitationem sunt\
+                            est voluptatum, reiciendis quidem quae accusantium assumenda voluptatem quasi\
+                            omnis ad laudantium, esse porro natus corrupti illo velit earum enim fugiat.\
+                            Libero atque cupiditate quasi ut a ea voluptates voluptate?</p>\
+                    </div>\
+                </div>\
+            ');
+            data.jela.forEach(function(item){
+                $('#restoran > div.container-fluid').append('\
+                <div class="row border bg-white">\
+                    <div class="col col-sm-8 mt-3">\
+                        <h4><strong>' + item.naziv + '</strong></h4>\
+                        <p>SASTOJCI: ' + item.sastojci + '</p>\
+                        <P><strong>' + item.cena + '</strong></P>\
+                        <button class="mb-2 btn btn-dark" onclick="dodaj(\'' + item.naziv + '\',' + item.cena + '\,\'' + item.slika + '\')">Dodaj u korpu</button>\
+                    </div>\
+                    <div class="col col-sm-4">\
+                        <img class="float-right m-2" src="../img/' + item.slika +'" alt=""\
+                            style="width: 200px;">\
+                    </div>\
+                </div>\
+                ')
+            });
+            $('#restorani > div.container-fluid').append('</div>');
+        }
+
+        function dodaj(naziv, cena, slika){
+            if(localStorage.cart){
+                var arr = JSON.parse(localStorage.cart);
+                if(arr.some(e => e.naziv === naziv)){
+                    arr.find(e => e.naziv === naziv).kolicina++;
+                }
+                else{
+                    arr.push({"naziv": naziv, "cena": cena, "slika": slika});
+                }
+                localStorage.setItem("cart", JSON.stringify(arr));
+            }
+            else{
+                var arr = new Array({"naziv": naziv, "cena": cena, "slika": slika, "kolicina" : 1});
+				localStorage.setItem("cart", JSON.stringify(arr));
+            }
+        }
+
+    </script>
+
 </head>
 
-<body>
+<body onload="load()">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
@@ -45,259 +126,36 @@
             <a class="navbar-brand" href="#">Dostava</a>
             <a class="navbar-brand" href="#">Moje Porudzbine</a>
             <a class="navbar-brand" href="#">O nama</a>
+            <a class="navbar-brand" href="korpa.html">Korpa</a>
             <a class="navbar-brand" href="#"><img src='../img/srbija.png' width='30px' height='20px'></a>
             <a class="navbar-brand" href="#"><img src='../img/uk.jpg' width='30px' height='20px'></a>
-
-
-
-
         </div>
     </nav>
 
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col col-sm10">
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <a href="restoran.html" style="color:black; text-decoration: none;">
-                                <img class="card-img-top" src="../img/restoran1.jfif"
-                                    style="height:auto; max-height: 300px" alt="">
-                                <div class="card-body">
-                                    <h5 class="card-title font-weight-bold">Ime restorana</h5>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <p class="card-text">Otvoreno - Srpska hrana - 838 m <br>
-                                        Dostava od: 1000 RSD - Besplatna dostava
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row mt-3">
-                        <div class="col col-sm-9">
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <h4><strong>Uslov dostave</strong></h4>
-                                    <p>Ispod cete videti uslove dostave koja vazi za adresu: ADRESA</p>
-                                    <p>Dostava od: 800 RSD</p>
-                                    <p>Cena dostave: Besplatna dostava</p>
-                                    <p>Vreme dostave: 60 min</p>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col border bg-white">
-                                    <h4><strong>Informacije</strong></h4>
-                                    <p>ADRESA RESTORANA</p>
-                                    <p>BROJ TELEFONA</p>
-                                    <p>OPIS: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse, ullam.
-                                        Placeat quos quasi aperiam porro maiores! Dolorum, nesciunt exercitationem sunt
-                                        est voluptatum, reiciendis quidem quae accusantium assumenda voluptatem quasi
-                                        omnis ad laudantium, esse porro natus corrupti illo velit earum enim fugiat.
-                                        Libero atque cupiditate quasi ut a ea voluptates voluptate?</p>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col p-0">
-                                    <div id="pizza" class="alert alert-dark">Pizza</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Margarita</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>850 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/margarita.jpeg" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Margarita</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>850 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/margarita.jpeg" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Margarita</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>850 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/margarita.jpeg" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col p-0">
-                                    <div id="burgeri" class="alert alert-dark">Burgeri</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Hamburger</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>650 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/hamburger.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Hamburger</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>650 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/hamburger.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Hamburger</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>650 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/hamburger.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col p-0">
-                                    <div id="paste" class="alert alert-dark">Paste</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Carbonara</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>540 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/carbonara.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Carbonara</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>540 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/carbonara.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border bg-white">
-                                    <div class="row">
-                                        <div class="col col-sm-8 mt-3">
-                                            <h4><strong>Carbonara</strong></h4>
-                                            <p>SASTOJCI: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                                placeat cumque, cupiditate natus necessitatibus odit.</p>
-                                            <P><strong>540 RSD</strong></P>
-                                            <button class="mb-2 btn btn-dark">Dodaj u korpu</button>
-                                        </div>
-                                        <div class="col col-sm-4">
-                                            <img class="float-right m-2" src="../img/carbonara.jfif" alt=""
-                                                style="width: 200px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="nav-right" class="col col-sm-3 pr-0">
-                            <ul class="nav flex-column border bg-white sticky-top">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#pizza">Pizza</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#burgeri">Burgeri</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#paste">Paste</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Salate</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Pica</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="restoran" class="container mt-3">
+        <!-- <div id="nav-right" class="col col-sm-3 pr-0">
+                    <ul class="nav flex-column border bg-white sticky-top">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#pizza">Pizza</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#burgeri">Burgeri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#paste">Paste</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Salate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pica</a>
+                        </li>
+                    </ul>
+                </div> -->
     </div>
 
-    <footer class="mt-3 pb-3 footer-expand-lg bg-white" style="color:black; text-decoration: none; text-align:center;">
-
+    <footer class="mt-3 pb-3 page-footer footer-expand-lg bg-white"
+        style="color:black; text-decoration: none; text-align:center;">
         Copyright 2019<br>
         Nikola Kovacevic • Stefan Pusica<br>
         Odsek za softversko inzenjerstvo Elektrotehnickog fakulteta Univerziteta u Beogradu
